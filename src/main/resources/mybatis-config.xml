@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 데이터베이스 컬럼이 user_name 이라면 연결되는 java의 변수명은 userName와 자동매핑 -->
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+	</settings>
+</configuration>
