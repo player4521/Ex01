@@ -7,5 +7,7 @@ import com.my.spring.dto.BoardDto;
 public interface BoardService {
 	public List<BoardDto> getBoardList() throws Exception;
 
-//	public Map<String, Object> insertBoard(BoardDto boardDto) throws Exception;
+	public void insertBoard(BoardDto boardDto) throws Exception;
+
+	public BoardDto getBoardContents(int bno) throws Exception;
 }
