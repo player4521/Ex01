@@ -12,7 +12,7 @@ public interface BoardMapper {
 
 	public void insertBoard(BoardDto boardDto);
 
-	public int updateBoard(BoardDto boardDto) throws Exception;
+	public int modifyBoard(BoardDto boardDto) throws Exception;
 
 	public int deleteBoard(int bno) throws Exception;
 

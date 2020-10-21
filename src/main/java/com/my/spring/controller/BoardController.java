@@ -2,6 +2,7 @@ package com.my.spring.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ public class BoardController {
 
 	private BoardService boardService;
 
+	// 게시글 리스트 불러오기
 	@GetMapping("boardList")
 	public String boardList(Model model) throws Exception {
 		log.info("boardList");
@@ -39,31 +41,65 @@ public class BoardController {
 	//		model.addAttribute("list", service.getList());
 	//	}
 
-	@RequestMapping("/boardWriteForm")
-	public String boardWriteForm() {
-		log.info("boardWriteForm");
-		return "board/boardWriteForm";
-	}
-
-	@RequestMapping(value = "/saveBoardForm", method = RequestMethod.POST)
-	public String saveBoard(@ModelAttribute("BoardDto") BoardDto boardDto, RedirectAttributes rttr) throws Exception {
-		log.info("redirect:/board/boardList");
-		boardService.insertBoard(boardDto);
-		return "redirect:/board/boardList";
-	}
-
+	// 게시글 내용 불러오기
 	@RequestMapping(value = "/getBoardContents", method = RequestMethod.GET)
 	public String getBoardContent(Model model, @RequestParam("bno") int bno) throws Exception {
+		log.info("board/boardContents");
 		model.addAttribute("boardContents", boardService.getBoardContents(bno));
 		return "board/boardContents";
 	}
 
+	// 게시글 작성 불러오기
+	@RequestMapping("/boardWriteForm")
+	public String boardWriteForm(@ModelAttribute("boardDto") BoardDto boardDto, Model model) throws Exception {
+		log.info("boardWriteForm");
+		return "board/boardWriteForm";
+	}
+
+	// 게시글 수정 불러오기
 	@RequestMapping(value = "/modifyForm", method = RequestMethod.GET)
-	public String editForm(@RequestParam("bno") int bno, @RequestParam("mode") String mode, Model model) throws Exception {
+	// jsp에서 온 URL의?뒤의 값은@RequestParam으로 받음,변수가 여러개일 경우 &로 구분
+	public String boardModifyForm(@RequestParam("bno") int bno, @RequestParam("mode") String mode, Model model)
+			throws Exception {
+		log.info("board/boardModifyForm");
 		model.addAttribute("boardContents", boardService.getBoardContents(bno));
 		model.addAttribute("mode", mode);
 		model.addAttribute("boardDto", new BoardDto());
 		return "board/boardModifyForm";
+	}
+
+	// 게시글 저장
+	@RequestMapping(value = "/saveBoardForm", method = RequestMethod.POST)
+	// redirect:를 사용할 경우 변수 RedirectAttributes rttr를 넘겨줘야함
+	public String saveBoard(@ModelAttribute("BoardDto") BoardDto boardDto, @RequestParam("mode") String mode,
+			RedirectAttributes rttr) throws Exception {
+		log.info("redirect:/board/boardList");
+
+		// 새 글 쓰기의 경우
+		if (mode.equals("write")) {
+			boardService.insertBoard(boardDto);
+
+			// 글 수정의 경우
+		} else if (mode.equals("modify")) {
+			boardService.modifyBoard(boardDto);
+		}
+		return "redirect:/board/boardList";
+	}
+
+	// 게시글 삭제
+	@RequestMapping(value = "/deleteBoard", method = RequestMethod.GET)
+	public String deleteBoard(@RequestParam("bno") int bno, RedirectAttributes rttr) throws Exception {
+		log.info("redirect:/board/boardList");
+		boardService.deleteBoard(bno);
+		return "redirect:/board/boardList";
+	}
+
+	// @ExceptionHandler를 이용한 예외처리
+	@ExceptionHandler(RuntimeException.class)
+	public String exceptionHandler(Model model, Exception e) {
+		log.info("exception : " + e.getMessage());
+		model.addAttribute("exception", e);
+		return "error/exception";
 	}
 
 }

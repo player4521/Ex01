@@ -11,9 +11,9 @@
 		FROM
 			TBL_BOARD
 		WHERE
-			bno > 0
+			BNO > 0
 		order by
-			bno
+			BNO
 		]]>
 	</select>
 
@@ -29,12 +29,26 @@
 		BNO = #{bno}
 	</select>
 
+	<update id="updateViewCnt"
+		parameterType="com.my.spring.dto.BoardDto">
+		UPDATE TBL_BOARD SET
+		VIEW_CNT = VIEW_CNT + 1
+		WHERE
+		BNO =
+		#{bno}
+	</update>
+
 	<insert id="insertBoard"
 		parameterType="com.my.spring.dto.BoardDto">
-		INSERT INTO TBL_BOARD (BNO, CATEGORY_CD, TITLE, CONTENT, TAG,
-		VIEW_CNT, REG_ID, REG_DATE, MOD_DATE)
-		VALUES (
-		BNO_SEQ.nextval
+		INSERT INTO
+		TBL_BOARD
+		(BNO, CATEGORY_CD, TITLE, CONTENT, TAG,
+		VIEW_CNT,
+		REG_ID, REG_DATE, MOD_DATE)
+		VALUES
+		(
+		<!-- BNO_SEQ.nextval -->
+		(SELECT NVL(MAX(bno)+1,1)FROM tbl_board)
 		<!-- ,#{category_cd} -->
 		,'test'<!-- 임시 category_cd -->
 		, #{title}
@@ -48,30 +62,25 @@
 		)
 	</insert>
 
-	<update id="updateBoard"
+	<update id="modifyBoard"
 		parameterType="com.my.spring.dto.BoardDto">
-		UPDATE TBL_BOARD SET
-		CATEGORY_CD = #{category_cd}
-		, TITLE = #{title}
+		UPDATE
+		TBL_BOARD
+		SET
+		<!-- CATEGORY_CD = #{category_cd} -->
+		TITLE
+		= #{title}
 		, CONTENT = #{content}
 		, TAG = #{tag}
-		, MOD_DATE = now()
+		, MOD_DATE =
+		sysdate
 		WHERE
 		BNO = ${bno}
 	</update>
 
 	<delete id="deleteBoard" parameterType="int">
 		DELETE FROM TBL_BOARD
-		WHERE bno = #{bno}
+		WHERE BNO = #{bno}
 	</delete>
-
-	<update id="updateViewCnt"
-		parameterType="com.my.spring.dto.BoardDto">
-		UPDATE TBL_BOARD SET
-		VIEW_CNT = VIEW_CNT + 1
-		WHERE
-		bno =
-		#{bno}
-	</update>
 
 </mapper>

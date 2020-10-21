@@ -14,8 +14,6 @@
 	// 글 저장 이벤트
 	$(document).on('click', '#btnSave', function(e) {
 		e.preventDefault();
-
-		// form 이라는 id를 가진 객체(여기서는 form 자체가 됨)
 		$("#form").submit();
 	});
 
@@ -28,7 +26,7 @@
 	// 글 수정 이벤트
 	$(document).ready(function(){
 		var mode = '<c:out value="${mode}"/>';
-		if ( mode == 'edit'){
+		if ( mode == 'modify'){
 
 			//입력 폼 셋팅
 			$("#reg_id").prop('readonly', true);
@@ -46,21 +44,23 @@
 <body>
 	<article>
 		<div class="container" role="main">
+
 			<h2>Board Modify</h2>
+
 			<form:form name="form" id="form" role="form"
 				modelAttribute="boardDto" method="post"
-				action="${pageContext.request.contextPath}/board/saveBoard">
+				action="${pageContext.request.contextPath}/board/saveBoardForm">
 				<form:hidden path="bno" />
 				<input type="hidden" name="mode" />
-				<div class="mb-3">
-					<label for="title">Title</label>
-					<form:input path="title" id="title" class="form-control"
-						placeholder="Please Insert Title" />
-				</div>
 				<div class="mb-3">
 					<label for="reg_id">Writer</label>
 					<form:input path="reg_id" id="reg_id" class="form-control"
 						placeholder="Please Insert Name" />
+				</div>
+				<div class="mb-3">
+					<label for="title">Title</label>
+					<form:input path="title" id="title" class="form-control"
+						placeholder="Please Insert Title" />
 				</div>
 				<div class="mb-3">
 					<label for="content">Content</label>
@@ -73,10 +73,12 @@
 						placeholder="Please Insert Tag" />
 				</div>
 			</form:form>
+
 			<div>
 				<button type="button" class="btn btn-sm btn-primary" id="btnSave">Save</button>
 				<button type="button" class="btn btn-sm btn-primary" id="btnBack">Back</button>
 			</div>
+
 		</div>
 	</article>
 </body>

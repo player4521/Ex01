@@ -23,17 +23,29 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
+	// 게시글 내용 확인
+	public BoardDto getBoardContents(int bno) throws Exception {
+		// 조회수 증가
+		mapper.updateViewCnt(bno);
+		return mapper.getBoardContents(bno);
+	}
+
+	@Override
 	// 게시글 등록
 	public void insertBoard(BoardDto boardDto) throws Exception {
 		mapper.insertBoard(boardDto);
 	}
 
 	@Override
-	// 게시글 내용 확인
-	public BoardDto getBoardContents(int bid) throws Exception {
-		// 조회수 증가
-		mapper.updateViewCnt(bid);
-		return mapper.getBoardContents(bid);
+	// 게시글 수정
+	public void modifyBoard(BoardDto boardDto) throws Exception {
+	mapper.modifyBoard(boardDto);
+	}
+
+	// 게시글 삭제
+	@Override
+	public void deleteBoard(int bno) throws Exception {
+		 mapper.deleteBoard(bno);
 	}
 
 }

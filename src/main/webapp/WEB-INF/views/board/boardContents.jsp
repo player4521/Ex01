@@ -17,9 +17,20 @@
 	// 수정 버튼 클릭 이벤트
 	$(document).on('click', '#btnModify', function(){
 		var url = "${pageContext.request.contextPath}/board/modifyForm";
-		url = url + "?bno="+${boardContents.bno};
-		url = url + "&mode=edit";
+		url = url + "?bno=" + ${boardContents.bno};
+		url = url + "&mode=modify";
 		location.href = url;
+	});
+
+	//삭제 버튼 클릭 이벤트
+	$(document).on('click', '#btnDelete', function(){
+		var deleteConfirm;
+		deleteConfirm = confirm("削除しますか？");
+		if (deleteConfirm){
+    		var url = "${pageContext.request.contextPath}/board/deleteBoard";
+    		url = url + "?bno=" + ${boardContents.bno};
+			location.href = url;
+		}
 	});
 
 </script>
@@ -27,12 +38,13 @@
 <body>
 	<article>
 		<div class="container" role="main">
+
 			<h2>Board Contents</h2>
 
 			<div class="bg-white rounded shadow-sm">
 				<div class="board_title"><c:out value="${boardContents.title}"/></div>
 				<div class="board_info_box">
-					<span class="board_author"><c:out value="${boardContents.reg_id}"/>,</span><span class="board_date"><c:out value="${boardContents.reg_date}"/></span>
+					<span class="board_author"><c:out value="${boardContents.reg_id}"/></span>|<span class="board_date"><c:out value="${boardContents.reg_date}"/></span>|
 				</div>
 				<div class="board_content">${boardContents.content}</div>
 				<div class="board_tag">TAG : <c:out value="${boardContents.tag}"/></div>
@@ -43,8 +55,8 @@
 				<button type="button" class="btn btn-sm btn-primary" id="btnDelete">Delete</button>
 				<button type="button" class="btn btn-sm btn-primary" id="btnCancel">Cancel</button>
 			</div>
-		</div>
 
+		</div>
 	</article>
 </body>
 </html>
