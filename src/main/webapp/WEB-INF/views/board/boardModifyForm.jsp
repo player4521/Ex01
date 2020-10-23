@@ -14,7 +14,12 @@
 	// 글 저장 이벤트
 	$(document).on('click', '#btnSave', function(e) {
 		e.preventDefault();
-		$("#form").submit();
+		var modifyConfirm;
+		modifyConfirm = confirm("以下の内容で修正しますか？");
+
+		if (modifyConfirm){
+			$("#form").submit();
+		}
 	});
 
 	// 취소 이벤트
@@ -26,17 +31,15 @@
 	// 글 수정 이벤트
 	$(document).ready(function(){
 		var mode = '<c:out value="${mode}"/>';
-		if ( mode == 'modify'){
-
-			//입력 폼 셋팅
-			$("#reg_id").prop('readonly', true);
-			$("input:hidden[name='bno']").val(<c:out value="${boardContents.bno}"/>);
-			$("input:hidden[name='mode']").val('<c:out value="${mode}"/>');
-			$("#reg_id").val('<c:out value="${boardContents.reg_id}"/>');
-			$("#title").val('<c:out value="${boardContents.title}"/>');
-			$("#content").val('<c:out value="${boardContents.content}"/>');
-			$("#tag").val('<c:out value="${boardContents.tag}"/>');
-		}
+		// if ( mode == 'modify'){
+		//입력 폼 셋팅
+		$("#reg_id").prop('readonly', true);
+		$("input:hidden[name='bno']").val(<c:out value="${boardContents.bno}"/>);
+		$("input:hidden[name='mode']").val('<c:out value="${mode}"/>');
+		$("#reg_id").val('<c:out value="${boardContents.reg_id}"/>');
+		$("#title").val('<c:out value="${boardContents.title}"/>');
+		$("#content").val('<c:out value="${boardContents.content}"/>');
+		$("#tag").val('<c:out value="${boardContents.tag}"/>');
 	});
 
 </script>

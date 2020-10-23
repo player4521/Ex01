@@ -5,16 +5,24 @@
 	<select id="getBoardList"
 		resultType="com.my.spring.dto.BoardDto">
 		<!-- xml에서 부등호를 사용할 경우CDATA가 필요 -->
-		<![CDATA[
+		<!-- <![CDATA[ -->
+		<!-- MySql의 경우 페이징 -->
+		<!-- SELECT * FROM TBL_BOARD WHERE BNO > 0 ORDER BY BNO LIMIT #{startList},
+			#{listSize} -->
+		<!-- ]]> -->
 		SELECT
-			*
+		*
 		FROM
-			TBL_BOARD
-		WHERE
-			BNO > 0
-		order by
-			BNO
-		]]>
+		(SELECT
+		<!-- bno 개수로 찾아올 경우 -->
+		<!-- ROW_NUMBER() OVER (ORDER BY BNO) NUM, board.* -->
+		ROWNUM NUM, board.*
+		FROM
+		TBL_BOARD board
+		ORDER BY BNO)
+		<!-- WHERE BNO BETWEEN #{startList} AND -->
+		WHERE NUM BETWEEN #{startList} AND
+		#{endList}
 	</select>
 
 	<select id="getBoardContents"
@@ -82,5 +90,13 @@
 		DELETE FROM TBL_BOARD
 		WHERE BNO = #{bno}
 	</delete>
+
+	<select id="getBoardListCnt" resultType="int">
+		SELECT
+		COUNT(*) AS
+		listCnt
+		FROM
+		TBL_BOARD
+	</select>
 
 </mapper>

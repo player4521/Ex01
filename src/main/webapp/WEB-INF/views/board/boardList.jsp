@@ -7,7 +7,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <%@ page session="false"%>
-
 <%@ include file="/WEB-INF/views/layout/header.jsp"%>
 <!DOCTYPE html>
 <html>
@@ -17,15 +16,48 @@
 <title>Board</title>
 <script>
 	// 게시글 작성으로 이동
-	$(document).on('click','#btnWriteForm',function(e) {
-		e.preventDefault();
-		location.href = "${pageContext.request.contextPath}/board/boardWriteForm";
-	});
+	$(document).on(
+					'click',
+					'#btnWriteForm',
+					function(e) {
+						e.preventDefault();
+						location.href = "${pageContext.request.contextPath}/board/boardWriteForm";
+					});
 
 	// 게시글 내용으로 이동
-	function fn_contentView(bno){
+	function fn_contentView(bno) {
 		var url = "${pageContext.request.contextPath}/board/getBoardContents";
-		url = url + "?bno="+bno;
+		url = url + "?bno=" + bno;
+		location.href = url;
+	}
+
+	//이전 버튼 이벤트
+	function fn_previousPage(page, range, rangeSize) {
+		var page = ((range - 2) * rangeSize) + 1;
+		var range = range - 1;
+		var url = "${pageContext.request.contextPath}/board/boardList";
+		url = url + "?page=" + page;
+		url = url + "&range=" + range;
+
+		location.href = url;
+	}
+
+	//페이지 번호 클릭
+	function fn_pagination(page, range, rangeSize, searchType, keyword) {
+		var url = "${pageContext.request.contextPath}/board/boardList";
+		url = url + "?page=" + page;
+		url = url + "&range=" + range;
+		location.href = url;
+	}
+
+	//다음 버튼 이벤트
+	function fn_nextPage(page, range, rangeSize) {
+		var page = parseInt((range * rangeSize)) + 1;
+		var range = parseInt(range) + 1;
+		var url = "${pageContext.request.contextPath}/board/boardList";
+		url = url + "?page=" + page;
+		url = url + "&range=" + range;
+
 		location.href = url;
 	}
 </script>
@@ -64,11 +96,9 @@
 								<c:forEach var="list" items="${boardList}">
 									<tr>
 										<td><c:out value="${list.bno}" /></td>
-										<td>
-											<a href="#" onClick="fn_contentView('${list.bno}')">
+										<td><a href="#" onClick="fn_contentView('${list.bno}')">
 												<c:out value="${list.title}" />
-											</a>
-										</td>
+										</a></td>
 										<td><c:out value="${list.reg_id}" /></td>
 										<td><fmt:formatDate value="${list.reg_date}"
 												pattern="yyyy-MM-dd" /></td>
@@ -88,6 +118,30 @@
 				<button type="button" class="btn btn-sm btn-primary"
 					id="btnWriteForm">Write</button>
 			</div>
+
+			<!-- pagination{s} -->
+			<div id="paginationBox">
+				<ul class="pagination">
+					<c:if test="${pagination.prev}">
+						<li class="page-item"><a class="page-link" href="#"
+							onClick="fn_previousPage('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}')">Previous</a></li>
+					</c:if>
+					<c:forEach begin="${pagination.startPage}"
+						end="${pagination.endPage}" var="idx">
+						<li class="page-item"
+							value="${pagination.page == idx ? 'active' : ''}"><a
+							class="page-link" href="#"
+							onClick="fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}')">${idx}</a>
+						</li>
+					</c:forEach>
+					<c:if test="${pagination.next}">
+						<li class="page-item"><a class="page-link" href="#"
+							onClick="fn_nextPage('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}')">Next</a></li>
+					</c:if>
+				</ul>
+			</div>
+			<!-- pagination{e} -->
+
 		</div>
 	</article>
 </body>

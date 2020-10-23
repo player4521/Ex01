@@ -3,7 +3,9 @@ package com.my.spring.service.impl;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.my.spring.common.Pagination;
 import com.my.spring.dto.BoardDto;
 import com.my.spring.mapper.board.BoardMapper;
 import com.my.spring.service.BoardService;
@@ -18,11 +20,12 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	// 게시글 리스트 습득
-	public List<BoardDto> getBoardList() throws Exception {
-		return mapper.getBoardList();
+	public List<BoardDto> getBoardList(Pagination pagination) throws Exception {
+		return mapper.getBoardList(pagination);
 	}
 
 	@Override
+	@Transactional
 	// 게시글 내용 확인
 	public BoardDto getBoardContents(int bno) throws Exception {
 		// 조회수 증가
@@ -31,21 +34,29 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
+	@Transactional
 	// 게시글 등록
-	public void insertBoard(BoardDto boardDto) throws Exception {
-		mapper.insertBoard(boardDto);
+	public int insertBoard(BoardDto boardDto) throws Exception {
+		return mapper.insertBoard(boardDto);
 	}
 
 	@Override
+	@Transactional
 	// 게시글 수정
-	public void modifyBoard(BoardDto boardDto) throws Exception {
-	mapper.modifyBoard(boardDto);
+	public int modifyBoard(BoardDto boardDto) throws Exception {
+		return mapper.modifyBoard(boardDto);
 	}
 
-	// 게시글 삭제
 	@Override
-	public void deleteBoard(int bno) throws Exception {
-		 mapper.deleteBoard(bno);
+	@Transactional
+	// 게시글 삭제
+	public int deleteBoard(int bno) throws Exception {
+		return mapper.deleteBoard(bno);
 	}
 
+	//총 게시글 개수 확인
+	@Override
+	public int getBoardListCnt() throws Exception {
+		return mapper.getBoardListCnt();
+	}
 }

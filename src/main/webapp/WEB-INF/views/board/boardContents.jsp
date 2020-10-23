@@ -25,7 +25,7 @@
 	//삭제 버튼 클릭 이벤트
 	$(document).on('click', '#btnDelete', function(){
 		var deleteConfirm;
-		deleteConfirm = confirm("削除しますか？");
+		deleteConfirm = confirm("本当に削除しますか？");
 		if (deleteConfirm){
     		var url = "${pageContext.request.contextPath}/board/deleteBoard";
     		url = url + "?bno=" + ${boardContents.bno};

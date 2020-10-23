@@ -8,7 +8,7 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<!-- 관리를 쉽게 하기 위해서 설정 파일을 한곳에 모음(규모가 큰 프로젝트에서 보통 사용) -->
-<!-- 		<param-value>/WEB-INF/spring/root-context.xml</param-value> -->
+		<!-- <param-value>/WEB-INF/spring/root-context.xml</param-value> -->
 		<param-value>classpath:/spring/*-context.xml</param-value>
 	</context-param>
 
@@ -37,9 +37,11 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
-    <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
-    </welcome-file-list>
+	<!-- 시작 페이지 지정 위에서부터 순차조회 -->
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>home.jsp</welcome-file>
+	</welcome-file-list>
 
 	<!-- 한글 처리를 위한 인코딩 필터 -->
 	<filter>
@@ -55,5 +57,11 @@
 		<filter-name>encoding</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+
+	<!-- Error Page -->
+	<error-page>
+		<error-code>404</error-code>
+		<location>/WEB-INF/views/error/404error.jsp</location>
+	</error-page>
 
 </web-app>

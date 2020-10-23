@@ -12,10 +12,15 @@
 	// 글 저장 이벤트
 	$(document).on('click', '#btnSave', function(e) {
 		e.preventDefault();
+		var writeConfirm;
+		writeConfirm = confirm("以下の内容で作成しますか？");
+
+		if (writeConfirm){
 		$("input:hidden[name='mode']").val('write');
 
 		// form 이라는 id를 가진 객체(여기서는 form 자체가 됨)
 		$("#form").submit();
+		}
 	});
 
 	// 취소 이벤트

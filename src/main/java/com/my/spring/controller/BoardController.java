@@ -2,7 +2,6 @@ package com.my.spring.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.my.spring.common.Pagination;
 import com.my.spring.dto.BoardDto;
 import com.my.spring.service.BoardService;
 
@@ -26,9 +26,16 @@ public class BoardController {
 
 	// 게시글 리스트 불러오기
 	@GetMapping("boardList")
-	public String boardList(Model model) throws Exception {
+	public String boardList(Model model, @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+			@RequestParam(value = "range", required = false, defaultValue = "1") int range) throws Exception {
 		log.info("boardList");
-		model.addAttribute("boardList", boardService.getBoardList());
+		//전체 게시글 개수
+		int listCnt = boardService.getBoardListCnt();
+		//Pagination 객체생성
+		Pagination pagination = new Pagination();
+		pagination.pageInfo(page, range, listCnt);
+		model.addAttribute("pagination", pagination);
+		model.addAttribute("boardList", boardService.getBoardList(pagination));
 		return "board/boardList";
 	}
 
@@ -95,11 +102,12 @@ public class BoardController {
 	}
 
 	// @ExceptionHandler를 이용한 예외처리
-	@ExceptionHandler(RuntimeException.class)
-	public String exceptionHandler(Model model, Exception e) {
-		log.info("exception : " + e.getMessage());
-		model.addAttribute("exception", e);
-		return "error/exception";
-	}
+	// CommonExceptionAdvice를 이용한 예외처리와 겹치기 때문에 주석처리
+	//	@ExceptionHandler(RuntimeException.class)
+	//	public String exceptionHandler(Model model, Exception e) {
+	//		log.info("exception : " + e.getMessage());
+	//		model.addAttribute("exception", e);
+	//		return "error/exception";
+	//	}
 
 }
