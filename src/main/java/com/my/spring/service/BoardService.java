@@ -2,11 +2,11 @@ package com.my.spring.service;
 
 import java.util.List;
 
-import com.my.spring.common.Pagination;
+import com.my.spring.common.Search;
 import com.my.spring.dto.BoardDto;
 
 public interface BoardService {
-	public List<BoardDto> getBoardList(Pagination pagination) throws Exception;
+	public List<BoardDto> getBoardList(Search search) throws Exception;
 
 	public BoardDto getBoardContents(int bno) throws Exception;
 
@@ -16,6 +16,6 @@ public interface BoardService {
 
 	public int deleteBoard(int bno) throws Exception;
 
-	public int getBoardListCnt() throws Exception;
+	public int getBoardListCnt(Search search) throws Exception;
 
 }

@@ -19,10 +19,47 @@
 		ROWNUM NUM, board.*
 		FROM
 		TBL_BOARD board
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if
+				test="searchType=='title' and keyword != null and keyword != '' ">
+				AND TITLE like '%' || #{keyword} || '%'
+			</if>
+			<if
+				test="searchType=='content' and keyword != null and keyword != '' ">
+				AND CONTENT like '%' || #{keyword} || '%'
+			</if>
+			<if
+				test="searchType=='reg_id' and keyword != null and keyword != '' ">
+				AND reg_id like '%' || #{keyword} || '%'
+			</if>
+		</trim>
 		ORDER BY BNO)
-		<!-- WHERE BNO BETWEEN #{startList} AND -->
-		WHERE NUM BETWEEN #{startList} AND
+		WHERE
+		NUM BETWEEN #{startList} AND
 		#{endList}
+		<!-- prefixOverrides 다음에 AND나OR가 나오면 생략한다 -->
+	</select>
+
+	<select id="getBoardListCnt" resultType="int">
+		SELECT
+		COUNT(*) AS
+		listCnt
+		FROM
+		TBL_BOARD
+		<!-- 하위 <if>에서 조건이 맞는 조건절이 있을 경우 WHERE 키워드를 생성 -->
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="keyword != null and keyword != '' ">
+				<if test="searchType=='title'">
+					AND TITLE like '%' || #{keyword} || '%'
+				</if>
+				<if test="searchType=='content'">
+					AND CONTENT like '%' || #{keyword} || '%'
+				</if>
+				<if test="searchType=='reg_id'">
+					AND reg_id like '%' || #{keyword} || '%'
+				</if>
+			</if>
+		</trim>
 	</select>
 
 	<select id="getBoardContents"
@@ -90,13 +127,5 @@
 		DELETE FROM TBL_BOARD
 		WHERE BNO = #{bno}
 	</delete>
-
-	<select id="getBoardListCnt" resultType="int">
-		SELECT
-		COUNT(*) AS
-		listCnt
-		FROM
-		TBL_BOARD
-	</select>
 
 </mapper>

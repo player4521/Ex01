@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.my.spring.common.Pagination;
+import com.my.spring.common.Search;
 import com.my.spring.dto.BoardDto;
 import com.my.spring.service.BoardService;
 
@@ -26,16 +26,26 @@ public class BoardController {
 
 	// 게시글 리스트 불러오기
 	@GetMapping("boardList")
-	public String boardList(Model model, @RequestParam(value = "page", required = false, defaultValue = "1") int page,
-			@RequestParam(value = "range", required = false, defaultValue = "1") int range) throws Exception {
-		log.info("boardList");
+	public String getBoardList(Model model,
+			@RequestParam(value = "page", required = false, defaultValue = "1") int page,
+			@RequestParam(value = "range", required = false, defaultValue = "1") int range,
+			@RequestParam(required = false, defaultValue = "title") String searchType,
+			@RequestParam(required = false) String keyword, @ModelAttribute("search") Search search) throws Exception {
+		log.info("getBoardList");
+
+		model.addAttribute("search", search);
+		search.setSearchType(searchType);
+		search.setKeyword(keyword);
+
 		//전체 게시글 개수
-		int listCnt = boardService.getBoardListCnt();
-		//Pagination 객체생성
-		Pagination pagination = new Pagination();
-		pagination.pageInfo(page, range, listCnt);
-		model.addAttribute("pagination", pagination);
-		model.addAttribute("boardList", boardService.getBoardList(pagination));
+		int listCnt = boardService.getBoardListCnt(search);
+		// Pagination 객체생성
+		//Pagination pagination = new Pagination();
+		//pagination.pageInfo(page, range, listCnt);
+		// search 객체생성
+		search.pageInfo(page, range, listCnt);
+		model.addAttribute("pagination", search);
+		model.addAttribute("boardList", boardService.getBoardList(search));
 		return "board/boardList";
 	}
 

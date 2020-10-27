@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.my.spring.common.Pagination;
+import com.my.spring.common.Search;
 import com.my.spring.dto.BoardDto;
 import com.my.spring.mapper.board.BoardMapper;
 import com.my.spring.service.BoardService;
@@ -20,8 +20,8 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	// 게시글 리스트 습득
-	public List<BoardDto> getBoardList(Pagination pagination) throws Exception {
-		return mapper.getBoardList(pagination);
+	public List<BoardDto> getBoardList(Search search) throws Exception {
+		return mapper.getBoardList(search);
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class BoardServiceImpl implements BoardService {
 
 	//총 게시글 개수 확인
 	@Override
-	public int getBoardListCnt() throws Exception {
-		return mapper.getBoardListCnt();
+	public int getBoardListCnt(Search search) throws Exception {
+		return mapper.getBoardListCnt(search);
 	}
 }
